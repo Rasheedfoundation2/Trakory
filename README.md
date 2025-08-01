@@ -1,1 +1,2 @@
-# Employee-management-system--React-JS
+# Trakory
+Employee Management System
