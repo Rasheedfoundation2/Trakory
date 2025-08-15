@@ -1,4 +1,3 @@
-import path from 'path';
 import { lazy } from 'react';
 import ProfileDropdown from '../components/dropdown/ProfileDropdown';
 const Index = lazy(() => import('../pages/Index'));
@@ -50,6 +49,8 @@ const RecoverIdBoxed = lazy(() => import('../pages/Authentication/RecoverIdBox')
 const LoginCover = lazy(() => import('../pages/Authentication/LoginCover'));
 const RegisterCover = lazy(() => import('../pages/Authentication/RegisterCover'));
 const RecoverIdCover = lazy(() => import('../pages/Authentication/RecoverIdCover'));
+const ForgotPassword = lazy(() => import('../pages/Authentication/ForgotPassword'));
+const ResetPassword = lazy(() => import('../pages/Authentication/ResetPassword'));
 const About = lazy(() => import('../pages/About'));
 const Error = lazy(() => import('../components/Error'));
 const Reports = lazy(() => import('../pages/Admin/Reports'));
@@ -347,6 +348,16 @@ const routes = [
     {
         path: '/auth/cover-password-reset',
         element: <RecoverIdCover />,
+        layout: 'blank',
+    },
+    {
+        path: '/auth/forgot-password',
+        element: <ForgotPassword />,
+        layout: 'blank',
+    },
+    {
+        path: '/auth/reset-password',
+        element: <ResetPassword />,
         layout: 'blank',
     },
     //forms page

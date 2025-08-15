@@ -41,7 +41,7 @@ const LoginBoxed = () => {
 
           if (response.data.token && response.data.user) {
     // Store token and user role
-    const user = response.data.user;
+    const { user } = response.data;
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('isAdmin', JSON.stringify(response.data.isAdmin));
     localStorage.setItem('userName', response.data.user.name);
@@ -107,6 +107,16 @@ const LoginBoxed = () => {
                                 </span>
                             </div>
                         </div>
+                        
+                        <div className="text-right mt-3">
+                            <Link 
+                                to="/auth/forgot-password" 
+                                className="text-primary text-sm hover:underline"
+                            >
+                                Forgot Password?
+                            </Link>
+                        </div>
+                        
                         <button
                             type="submit"
                             className="btn btn-gradient w-full mt-6"
