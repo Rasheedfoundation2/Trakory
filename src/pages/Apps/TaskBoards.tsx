@@ -11,7 +11,7 @@ import IconListCheck from '../../components/Icon/IconListCheck';
 import IconCalendar from '../../components/Icon/IconCalendar';
 import IconHorizontalDots from '../../components/Icon/IconHorizontalDots';
 
-const API_BASE = 'http://localhost:5000/api/task-boards';
+const API_BASE = (import.meta as any).env?.VITE_TASK_BOARDS_API ?? 'http://localhost:5050/api/task-boards';
 
 type Status = 'not_started' | 'working_on_it' | 'stuck' | 'done';
 type Priority = 'low' | 'medium' | 'high' | 'critical';

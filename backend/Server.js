@@ -31,7 +31,6 @@ const attendanceRoutes = require('./routes/attendance-routes');
 const driveRoutes = require('./routes/drive-routes');
 const projectsRoutes = require('./routes/projects-routes');
 const userManagementRoutes = require('./routes/user-management-routes');
-const taskBoardsRoutes = require('./routes/task-boards-routes');
 
 app.use('/', authRoutes);
 app.use('/api', eventsRoutes);
@@ -45,7 +44,6 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/drive', driveRoutes);
 app.use('/api/project_task', projectsRoutes);
 app.use('/api/user-management', userManagementRoutes);
-app.use('/api/task-boards', taskBoardsRoutes);
 
 // 🔹 Catch-all: send index.html for client-side routing (React Router)
 app.get('*', (req, res) => {
