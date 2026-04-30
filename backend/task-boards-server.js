@@ -15,7 +15,13 @@ app.use('/api/task-boards', taskBoardsRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-const PORT = process.env.TASK_BOARDS_PORT || 5050;
+// Serve the standalone single-page UI (no build step required).
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || process.env.TASK_BOARDS_PORT || 5050;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Task Boards API running on http://localhost:${PORT}`);
+    console.log(`Task Boards running on http://localhost:${PORT}`);
 });
