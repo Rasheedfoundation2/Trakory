@@ -18,6 +18,7 @@ import IconFolder from '../Icon/IconFolder';
 import IconHome from '../Icon/IconHome';
 import IconTrackory from '../Icon/IconTrackory';
 import IconChecks from '../Icon/IconChecks';
+import IconListCheck from '../Icon/IconListCheck';
 import axios from 'axios';
 
 const Sidebar = () => {
@@ -77,6 +78,7 @@ const Sidebar = () => {
         { path: '/apps/drive', icon: <IconFolder className="w-5 h-5" />, label: 'Drive' },
         { path: '/apps/Projects', icon: <IconBookmark className="w-5 h-5" />, label: 'Projects' },
         { path: '/apps/scrumboard', icon: <IconMenuScrumboard className="w-5 h-5" />, label: 'Scrumboard' },
+        { path: '/apps/task-boards', icon: <IconListCheck className="w-5 h-5" />, label: 'Task Boards' },
         { path: '/apps/calendar', icon: <IconMenuCalendar className="w-5 h-5" />, label: 'Calendar' },
         { path: '/apps/approvals', icon: <IconFile className="w-5 h-5" />, label: 'Approvals' },
         { path: '/apps/attendance', icon: <IconChecks className="w-5 h-5" />, label: 'Attendance' },
