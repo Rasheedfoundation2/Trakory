@@ -7,6 +7,7 @@ import IconMenu from '../../components/Icon/IconMenu';
 import IconSearch from '../../components/Icon/IconSearch';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../store';
+import { API_BASE_URL } from '../../config/api';
 
 interface AttendanceEntry {
   id: number;
@@ -36,7 +37,7 @@ const Attendance: React.FC = () => {
           return;
         }
 
-        const res = await axios.get('http://localhost:5000/api/attendance/my', {
+        const res = await axios.get(`${API_BASE_URL}/api/attendance/my`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

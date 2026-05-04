@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Users, MessageCircle, X, Plus, Search } from 'lucide-react';
+import { API_BASE_URL } from '../../config/api';
 
 interface User {
     id: number;
@@ -112,7 +113,7 @@ const getCurrentUser = () => {
    const apiCall = async (url: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`http://localhost:5000/api/chat${url}`, {
+        const response = await fetch(`${API_BASE_URL}/api/chat${url}`, {
             ...options,
             headers: {
                 'Content-Type': 'application/json',

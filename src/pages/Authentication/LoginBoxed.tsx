@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 // import { useState } from 'react';
 // import axios from 'axios';
 import { useState } from 'react';
@@ -30,7 +31,7 @@ const LoginBoxed = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post(`${API_BASE_URL}/login`, {
                 email: formData.email,
                 password: formData.password
             });

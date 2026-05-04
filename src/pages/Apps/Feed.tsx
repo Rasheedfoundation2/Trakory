@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react'; // Already might be there, but ensure
 import { ChevronDown, Paperclip, FileText, AtSign, Send, ThumbsUp, CheckSquare, ListPlus } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { API_BASE_URL } from '../../config/api';
 
 // Tab names for primary options
 const tabs = ['Message', 'Task', 'Event'];
@@ -288,7 +289,7 @@ function Feed() {
         });
 
         try {
-            const res = await axios.post('http://localhost:5000/api/feed', formData);
+            const res = await axios.post(`${API_BASE_URL}/api/feed`, formData);
             setMessage('');
             setUploadedFiles([]);
             setSelectedUsers([]);
@@ -376,7 +377,7 @@ function Feed() {
         });
 
         try {
-            const res = await axios.post('http://localhost:5000/api/feed/task', formData);
+            const res = await axios.post(`${API_BASE_URL}/api/feed/task`, formData);
 
             Swal.fire({
                 icon: 'success',
@@ -436,7 +437,7 @@ function Feed() {
     const fetchFeedMessages = async () => {
         try {
             const userName = localStorage.getItem('userName');
-            const response = await axios.get(`http://localhost:5000/api/feed/${userName}`);
+            const response = await axios.get(`${API_BASE_URL}/api/feed/${userName}`);
 
             setFeedMessages(response.data);
         } catch (error) {
@@ -460,7 +461,7 @@ function Feed() {
     const fetchFeedTasks = async () => {
         try {
             const userName = localStorage.getItem('userName');
-            const response = await axios.get(`http://localhost:5000/api/feed/task/${userName}`);
+            const response = await axios.get(`${API_BASE_URL}/api/feed/task/${userName}`);
             setFeedTasks(response.data);
         } catch (error) {
             console.error('Failed to fetch feed tasks', error);
@@ -476,7 +477,7 @@ function Feed() {
     // Add this function in Feed.tsx
     const fetchProjects = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/project/task');
+            const response = await axios.get(`${API_BASE_URL}/api/project/task`);
             const projectNames = response.data.map((project: { name: any }) => project.name); // 👈 Make sure you're mapping just names
             return projectNames;
         } catch (error) {
@@ -500,7 +501,7 @@ function Feed() {
             const userName = localStorage.getItem('userName');
             const token = localStorage.getItem('token');
 
-            const response = await axios.get('http://localhost:5000/api/events', {
+            const response = await axios.get(`${API_BASE_URL}/api/events`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -2041,7 +2042,7 @@ function Feed() {
                                                     <div className="text-sm flex items-center">
                                                         <span className="mr-1">📎</span>
                                                         <a
-                                                            href={`http://localhost:5000/${paths[fileIndex]}`}
+                                                            href={`${API_BASE_URL}/${paths[fileIndex]}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="text-blue-500 hover:text-blue-700 underline"
@@ -2068,7 +2069,7 @@ function Feed() {
                                                                     className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
-                                                                        downloadFeedFile(`http://localhost:5000/${paths[fileIndex]}`, name);
+                                                                        downloadFeedFile(`${API_BASE_URL}/${paths[fileIndex]}`, name);
                                                                         setActiveFeedFileMenu(null);
                                                                     }}
                                                                 >
@@ -2142,7 +2143,7 @@ function Feed() {
                                                 <div key={index} className="flex items-center">
                                                     <span className="mr-1">📎</span>
                                                     <a
-                                                        href={`http://localhost:5000/${filePaths[index]}`}
+                                                        href={`${API_BASE_URL}/${filePaths[index]}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="text-blue-500 hover:text-blue-700 underline"

@@ -1,6 +1,7 @@
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { API_BASE_URL } from '../../config/api';
 // import { useDispatch } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import { toggleSidebar } from '../../store/themeConfigSlice';
@@ -37,7 +38,7 @@ const Sidebar = () => {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:5000/user-info', {
+                const response = await axios.get(`${API_BASE_URL}/user-info`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 

@@ -15,6 +15,7 @@ import IconCalendar from '../../components/Icon/IconCalendar';
 import IconEdit from '../../components/Icon/IconEdit';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import IconX from '../../components/Icon/IconX';
+import { API_BASE_URL } from '../../config/api';
 
 const Scrumboard = () => {
     const dispatch = useDispatch();
@@ -43,7 +44,7 @@ useEffect(() => {
 
 const fetchStatusListFromDB = async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/columns');
+        const response = await fetch(`${API_BASE_URL}/api/columns`);
         const data = await response.json();
         setAllStatuses(data); // store statuses for dropdown
     } catch (err) {
@@ -61,7 +62,7 @@ const [allProjects, setAllProjects] = useState<any[]>([]);
 const fetchProjectListFromDB = async () => {
     try {
         
-        const response = await fetch('http://localhost:5000/api/project_task');
+        const response = await fetch(`${API_BASE_URL}/api/project_task`);
         const data = await response.json();
         setAllProjects(data); // ⬅️ store in state
     } catch (err) {
@@ -72,7 +73,7 @@ const fetchProjectListFromDB = async () => {
 
 const fetchColumnsFromDB = async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/columns-with-tasks');
+        const response = await fetch(`${API_BASE_URL}/api/columns-with-tasks`);
         const data = await response.json();
         setProjectList(data); // ✅ Includes tasks now
     } catch (err) {
@@ -140,7 +141,7 @@ const fetchColumnsFromDB = async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/project_task', {
+        const response = await fetch(`${API_BASE_URL}/api/project_task`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: params.title })
@@ -222,14 +223,14 @@ const formattedDate = dd + ' ' + monthNames[mm] + ', ' + yyyy;
         let response;
         if (paramsTask.id) {
             // Update existing task
-            response = await fetch(`http://localhost:5000/api/tasks/${paramsTask.id}`, {
+            response = await fetch(`${API_BASE_URL}/api/tasks/${paramsTask.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(taskData),
             });
         } else {
             // Create new task
-            response = await fetch('http://localhost:5000/api/tasks', {
+            response = await fetch(`${API_BASE_URL}/api/tasks`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(taskData),
@@ -267,7 +268,7 @@ const formattedDate = dd + ' ' + monthNames[mm] + ', ' + yyyy;
     };
    const deleteTask = async () => {
     try {
-        const response = await fetch(`http://localhost:5000/api/tasks/${selectedTask.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/tasks/${selectedTask.id}`, {
             method: 'DELETE',
         });
 

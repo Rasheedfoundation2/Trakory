@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from '../../config/api';
 
 interface User {
   id: number;
@@ -27,7 +28,7 @@ const ProfileDropdown = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:5000/user-info', {
+        const response = await axios.get(`${API_BASE_URL}/user-info`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'

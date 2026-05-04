@@ -11,6 +11,7 @@ import IconPlus from '../../components/Icon/IconPlus';
 import IconX from '../../components/Icon/IconX';
 import axios from 'axios';
 import { config } from '@fullcalendar/core/internal';
+import { API_BASE_URL } from '../../config/api';
 
 // for the custome select option 
 
@@ -108,7 +109,7 @@ const Calendar = () => {
                 'Authorization': `Bearer ${token}`
             }
         };
-        const response = await axios.get('http://localhost:5000/api/events', config);
+        const response = await axios.get(`${API_BASE_URL}/api/events`, config);
         setEvents(response.data.map((event: any) => ({
             id: event.id,
             title: event.title,
@@ -193,9 +194,9 @@ const saveEvent = async () => {
 
         let response;
         if (params.id) {
-            response = await axios.put(`http://localhost:5000/api/events/${params.id}`, eventData, config);
+            response = await axios.put(`${API_BASE_URL}/api/events/${params.id}`, eventData, config);
         } else {
-            response = await axios.post('http://localhost:5000/api/events', eventData, config);
+            response = await axios.post(`${API_BASE_URL}/api/events`, eventData, config);
         }
 
         showMessage(params.id ? 'Event updated successfully' : 'Event created successfully');
@@ -251,7 +252,7 @@ useEffect(() => {
             // Get the token for authorization
             const token = localStorage.getItem('token');
             
-            const response = await axios.get('http://localhost:5000/api/users', {
+            const response = await axios.get(`${API_BASE_URL}/api/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

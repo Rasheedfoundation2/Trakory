@@ -64,7 +64,7 @@
 
 //         try {
 //             // Call the register API endpoint
-//             const response = await axios.post('http://localhost:5000/register', {
+//             const response = await axios.post(`${API_BASE_URL}/register`, {
 //                 name: formData.name,
 //                 email: formData.email,
 //                 password: formData.password
@@ -287,6 +287,7 @@ import IconUser from '../../components/Icon/IconUser';
 import IconMail from '../../components/Icon/IconMail';
 import IconLockDots from '../../components/Icon/IconLockDots';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 const RegisterBoxed = () => {
     const dispatch = useDispatch();
@@ -337,7 +338,7 @@ const RegisterBoxed = () => {
 
         try {
             // Call the register API endpoint
-            const response = await axios.post('http://localhost:5000/register', {
+            const response = await axios.post(`${API_BASE_URL}/register`, {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password

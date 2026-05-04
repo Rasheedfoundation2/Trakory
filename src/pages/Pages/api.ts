@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/config/api";
 // export const fetchUserNames = async (): Promise<string[]> => {
 //     try {
 //         const response = await fetch('/api/users');
@@ -13,7 +14,7 @@
 
 export const fetchUserNames = async (): Promise<string[]> => {
     try {
-        const response = await fetch('http://localhost:5000/api/users/names');
+        const response = await fetch(`${API_BASE_URL}/api/users/names`);
         if (!response.ok) throw new Error('Network response was not ok');
         return await response.json();
     } catch (error) {

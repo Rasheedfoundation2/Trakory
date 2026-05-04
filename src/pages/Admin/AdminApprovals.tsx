@@ -13,6 +13,7 @@ import IconChecks from '../../components/Icon/IconChecks';
 import IconX from '../../components/Icon/IconX';
 import IconCalendar from '../../components/Icon/IconCalendar';
 import IconClock from '../../components/Icon/IconClock';
+import { API_BASE_URL } from '../../config/api';
 
 type ApprovalType = 'leave' | 'attendanceIssue' | 'breakIssue';
 
@@ -42,7 +43,7 @@ const AdminApprovals: React.FC = () => {
   const navigate = useNavigate();
   const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
 
-  const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const apiBaseUrl = API_BASE_URL;
   
 
   const fetchAllApprovals = async () => {
