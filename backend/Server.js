@@ -6,8 +6,40 @@ const cors = require('cors');
 
 // Initialize Express app
 const app = express();
-app.use(cors());
+
+// CORS — explicit, with preflight + credentials. Allows Vercel deploys
+// (any *.vercel.app), localhost dev, and anything in CORS_ORIGINS env.
+const extraOrigins = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+const corsOptions = {
+    origin(origin, callback) {
+        // Non-browser requests (curl, server-to-server) have no Origin → allow.
+        if (!origin) return callback(null, true);
+        if (
+            origin.endsWith('.vercel.app') ||
+            origin.startsWith('http://localhost') ||
+            origin.startsWith('http://127.0.0.1') ||
+            extraOrigins.includes(origin)
+        ) {
+            return callback(null, true);
+        }
+        return callback(null, false);
+    },
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
+
+// Health check — useful to verify the backend is awake before debugging auth.
+app.get('/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 
 // Import database connection
 require('./config/db');
