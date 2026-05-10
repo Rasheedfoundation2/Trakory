@@ -130,6 +130,70 @@ router.get('/user-info', authenticateToken, (req, res) => {
     );
 });
 
+// One-shot admin setup endpoint. Useful when there is no shell on the host.
+// Creates a new admin or promotes / resets the password of an existing user.
+// Protected by SETUP_TOKEN env var — set it on the host before calling, and
+// remove or rotate it afterwards.
+//
+//   curl -X POST https://<backend>/setup-admin \
+//        -H "Content-Type: application/json" \
+//        -d '{"token":"<SETUP_TOKEN>","email":"you@x.com","password":"...","name":"You"}'
+router.post('/setup-admin', async (req, res) => {
+    const expected = process.env.SETUP_TOKEN;
+    if (!expected) {
+        return res.status(503).json({ error: 'SETUP_TOKEN is not configured on the server' });
+    }
+
+    const { token, email, password, name } = req.body || {};
+    if (!token || token !== expected) {
+        return res.status(403).json({ error: 'Invalid setup token' });
+    }
+    if (!email || !password) {
+        return res.status(400).json({ error: 'email and password are required' });
+    }
+
+    try {
+        const hashed = await bcrypt.hash(password, 10);
+        const safeName = (name || String(email).split('@')[0]).trim();
+
+        db.query('SELECT id FROM users WHERE email = ?', [email], (err, rows) => {
+            if (err) {
+                console.error('setup-admin lookup error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+
+            if (rows.length) {
+                db.query(
+                    'UPDATE users SET password = ?, is_admin = 1, name = ? WHERE email = ?',
+                    [hashed, safeName, email],
+                    (err) => {
+                        if (err) {
+                            console.error('setup-admin update error:', err);
+                            return res.status(500).json({ error: 'Failed to update user' });
+                        }
+                        res.json({ ok: true, action: 'promoted', email });
+                    }
+                );
+            } else {
+                db.query(
+                    'INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 1)',
+                    [safeName, email, hashed],
+                    (err, result) => {
+                        if (err) {
+                            console.error('setup-admin insert error:', err);
+                            return res.status(500).json({ error: 'Failed to create user' });
+                        }
+                        res.json({ ok: true, action: 'created', email, id: result.insertId });
+                    }
+                );
+            }
+        });
+    } catch (e) {
+        console.error('setup-admin unexpected error:', e);
+        res.status(500).json({ error: 'Unexpected error' });
+    }
+});
+
 // Forgot Password - Send reset email
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
