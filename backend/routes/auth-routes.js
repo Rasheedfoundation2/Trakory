@@ -65,6 +65,54 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Setup admin user (for hosts without shell access)
+router.post('/setup-admin', async (req, res) => {
+    const { setupToken, name, email, password } = req.body;
+    
+    // Protect this endpoint with a strong secret token stored in env
+    const expectedToken = process.env.SETUP_ADMIN_TOKEN;
+    if (!expectedToken || setupToken !== expectedToken) {
+        return res.status(403).json({ error: 'Forbidden: Invalid setup token' });
+    }
+
+    if (!email || !password || !name) {
+        return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+
+    try {
+        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            if (results.length > 0) {
+                // Update to admin
+                db.query(
+                    'UPDATE users SET password = ?, is_admin = 1 WHERE email = ?',
+                    [hashedPassword, email],
+                    (err) => {
+                        if (err) return res.status(500).json({ error: 'Update error' });
+                        res.json({ message: 'User updated to admin successfully' });
+                    }
+                );
+            } else {
+                // Insert new admin
+                db.query(
+                    'INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 1)',
+                    [name, email, hashedPassword],
+                    (err) => {
+                        if (err) return res.status(500).json({ error: 'Insert error' });
+                        res.status(201).json({ message: 'Admin user created successfully' });
+                    }
+                );
+            }
+        });
+    } catch (error) {
+        console.error('Setup admin error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Login user
 router.post('/login', (req, res) => {
     const { email, password } = req.body;

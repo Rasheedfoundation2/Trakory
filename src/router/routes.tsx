@@ -74,6 +74,11 @@ const routes = [
 
     {
         path: '/',
+        element: <Index />,
+    },
+
+    {
+        path: '/login',
         element: <LoginBoxed />,
         layout: 'blank',
     },

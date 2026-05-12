@@ -29,6 +29,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Handle OPTIONS requests (preflight)
+app.options('*', cors());
+
 app.use(express.json());
 
 // Import database connection
