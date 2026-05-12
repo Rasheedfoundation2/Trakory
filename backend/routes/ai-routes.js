@@ -54,7 +54,7 @@ router.post('/chat', authenticateToken, async (req, res) => {
 
         // Call Gemini API
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1alpha/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -63,11 +63,17 @@ router.post('/chat', authenticateToken, async (req, res) => {
                     systemInstruction: {
                         parts: [{ text: SYSTEM_PROMPT }]
                     },
+                    tools: [
+                        { googleSearch: {} }
+                    ],
                     generationConfig: {
                         temperature: 0.7,
                         topK: 40,
                         topP: 0.95,
                         maxOutputTokens: 1024,
+                        thinkingConfig: {
+                            thinkingLevel: "HIGH"
+                        }
                     },
                     safetySettings: [
                         { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
@@ -111,7 +117,7 @@ router.get('/health', (req, res) => {
     res.json({ 
         success: true, 
         aiEnabled: isConfigured,
-        model: 'gemini-2.0-flash'
+        model: 'gemini-3-flash-preview'
     });
 });
 
