@@ -6,6 +6,8 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=intern_management
+DB_PORT=3306
+DB_SSL=false
 
 # JWT Secret
 JWT_SECRET=your_jwt_secret_key_here
@@ -21,3 +23,7 @@ FRONTEND_URL=http://localhost:3000
 # Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# AI Configuration (Google Gemini - free tier)
+# Get your key at: https://aistudio.google.com/apikey
+GEMINI_API_KEY=your_gemini_api_key_here

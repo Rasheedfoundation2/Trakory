@@ -14,6 +14,7 @@ import IconFolder from '../../components/Icon/IconFolder';
 import IconCalendar from '../../components/Icon/IconCalendar';
 import IconClock from '../../components/Icon/IconClock';
 import IconEdit from '../../components/Icon/IconEdit';
+import { API_BASE_URL } from '../../config/api';
 
 interface Project {
   id: string;
@@ -64,7 +65,7 @@ const ProjectManagement: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const response = await fetch(`http://localhost:5000/api/project_task`, {
+      const response = await fetch(`${API_BASE_URL}/api/project_task`, {
      
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -127,7 +128,7 @@ const ProjectManagement: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch('http://localhost:5000/api/project_task', {
+      const response = await fetch(`${API_BASE_URL}/api/project_task`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +184,7 @@ const ProjectManagement: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch(`http://localhost:5000/api/project_task/${editingProject.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/project_task/${editingProject.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -239,7 +240,7 @@ const ProjectManagement: React.FC = () => {
           const token = localStorage.getItem('token');
           if (!token) return;
 
-          const response = await fetch(`http://localhost:5000/api/project_task/${projectId}/delete`, {
+          const response = await fetch(`${API_BASE_URL}/api/project_task/${projectId}/delete`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`
@@ -271,7 +272,7 @@ const ProjectManagement: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch(`http://localhost:5000/api/project_task/${projectId}/restore`, {
+      const response = await fetch(`${API_BASE_URL}/api/project_task/${projectId}/restore`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -310,7 +311,7 @@ const ProjectManagement: React.FC = () => {
           const token = localStorage.getItem('token');
           if (!token) return;
 
-          const response = await fetch(`http://localhost:5000/api/project_task/${projectId}`, {
+          const response = await fetch(`${API_BASE_URL}/api/project_task/${projectId}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`

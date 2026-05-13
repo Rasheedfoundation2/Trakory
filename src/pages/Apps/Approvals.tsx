@@ -11,6 +11,7 @@ import IconMenu from '../../components/Icon/IconMenu';
 import IconSearch from '../../components/Icon/IconSearch';
 import IconChecks from '../../components/Icon/IconChecks';
 import IconX from '../../components/Icon/IconX';
+import { API_BASE_URL } from '../../config/api';
 
 type FormType = 'leave' | 'attendanceIssue' | 'breakIssue';
 
@@ -84,7 +85,7 @@ const ApprovalSystem: React.FC = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/approvals', {
+            const response = await fetch(`${API_BASE_URL}/api/approvals`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -160,7 +161,7 @@ const ApprovalSystem: React.FC = () => {
                 throw new Error('To date must be after from date');
             }
 
-            const response = await fetch('http://localhost:5000/api/approvals', {
+            const response = await fetch(`${API_BASE_URL}/api/approvals`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -202,7 +203,7 @@ const ApprovalSystem: React.FC = () => {
                 throw new Error('All fields are required');
             }
 
-            const response = await fetch('http://localhost:5000/api/approvals', {
+            const response = await fetch(`${API_BASE_URL}/api/approvals`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -243,7 +244,7 @@ const ApprovalSystem: React.FC = () => {
                 throw new Error('All fields are required');
             }
 
-            const response = await fetch('http://localhost:5000/api/approvals', {
+            const response = await fetch(`${API_BASE_URL}/api/approvals`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

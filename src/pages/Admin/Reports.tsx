@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../store';
 import IconUser from '../../components/Icon/IconUser';
 import IconFile from '../../components/Icon/IconFile';
+import { API_BASE_URL } from '../../config/api';
 
 interface AttendanceEntry {
     id: number;
@@ -54,7 +55,7 @@ const Reports: React.FC = () => {
                     return;
                 }
 
-                const res = await axios.get('http://localhost:5000/api/attendance/all', {
+                const res = await axios.get(`${API_BASE_URL}/api/attendance/all`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

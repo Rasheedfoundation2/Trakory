@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 const ForgotPassword = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const ForgotPassword = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:5000/forgot-password', {
+            const response = await axios.post(`${API_BASE_URL}/forgot-password`, {
                 email: email.trim()
             });
 

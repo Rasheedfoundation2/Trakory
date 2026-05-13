@@ -1,0 +1,6 @@
+{
+    "gitlens.currentLine.enabled": true,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.views.repositories.includeWorkingTree": true,
+    "gitlens.keymap": "none"
+}

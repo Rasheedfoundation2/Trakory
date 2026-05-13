@@ -14,6 +14,7 @@ import IconPhone from '../../components/Icon/IconPhone';
 import IconTwitter from '../../components/Icon/IconTwitter';
 import IconDribbble from '../../components/Icon/IconDribbble';
 import IconGithub from '../../components/Icon/IconGithub';
+import { API_BASE_URL } from '../../config/api';
 
 interface UserProfile {
   id: number;
@@ -47,7 +48,7 @@ const Profile = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/user-info', {
+      const response = await axios.get(`${API_BASE_URL}/user-info`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 
 interface TimerData {
   startTime: string | null;
@@ -79,7 +80,7 @@ const TimeTracker = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await axios.get('http://localhost:5000/api/timers/current', {
+      const response = await axios.get(`${API_BASE_URL}/api/timers/current`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -117,7 +118,7 @@ const TimeTracker = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/timers/start',
+        `${API_BASE_URL}/api/timers/start`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -145,7 +146,7 @@ const TimeTracker = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/timers/break',
+        `${API_BASE_URL}/api/timers/break`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -173,7 +174,7 @@ const TimeTracker = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/timers/continue',
+        `${API_BASE_URL}/api/timers/continue`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -201,7 +202,7 @@ const TimeTracker = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/timers/end',
+        `${API_BASE_URL}/api/timers/end`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -20,10 +20,19 @@ const createTransporter = () => {
 // Send password reset email
 const sendPasswordResetEmail = async (email, resetToken, userName) => {
     try {
-        const transporter = createTransporter();
-        
         // Create reset URL - adjust this based on your frontend URL
         const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/reset-password?token=${resetToken}`;
+
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+            console.log('--- MOCK EMAIL (No credentials provided) ---');
+            console.log(`To: ${email}`);
+            console.log(`Subject: Password Reset Request - Trakory`);
+            console.log(`Reset URL: ${resetUrl}`);
+            console.log('-------------------------------------------');
+            return { success: true, messageId: 'mock-id-no-credentials' };
+        }
+
+        const transporter = createTransporter();
         
         const mailOptions = {
             from: {
@@ -186,6 +195,14 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
 // Send welcome email (optional)
 const sendWelcomeEmail = async (email, userName) => {
     try {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+            console.log('--- MOCK EMAIL (No credentials provided) ---');
+            console.log(`To: ${email}`);
+            console.log(`Subject: Welcome to Trakory!`);
+            console.log('-------------------------------------------');
+            return { success: true, messageId: 'mock-id-no-credentials' };
+        }
+
         const transporter = createTransporter();
         
         const mailOptions = {

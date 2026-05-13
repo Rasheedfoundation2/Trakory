@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import IconLoader from '../../components/Icon/IconLoader';
+import { API_BASE_URL } from '../../config/api';
 
 interface User {
     id: number;
@@ -43,7 +44,7 @@ const ManageUsers = () => {
             setLoading(true);
             const token = localStorage.getItem('token');
 
-            const response = await axios.get('http://localhost:5000/api/user-management', {
+            const response = await axios.get(`${API_BASE_URL}/api/user-management`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -82,7 +83,7 @@ const ManageUsers = () => {
     const toggleAdminStatus = async (userId: number, currentStatus: boolean) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.patch(`http://localhost:5000/api/user-management/${userId}/admin-status`, { is_admin: !currentStatus }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.patch(`${API_BASE_URL}/api/user-management/${userId}/admin-status`, { is_admin: !currentStatus }, { headers: { Authorization: `Bearer ${token}` } });
             fetchUsers();
             Swal.fire('Success', `User role updated to ${!currentStatus ? 'Admin' : 'User'}`, 'success');
         } catch (error: any) {
@@ -109,7 +110,7 @@ const ManageUsers = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`http://localhost:5000/api/user-management/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+                await axios.delete(`${API_BASE_URL}/api/user-management/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
                 fetchUsers();
                 Swal.fire('Deleted!', 'User has been deleted.', 'success');
             } catch (error: any) {

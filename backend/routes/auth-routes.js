@@ -15,10 +15,15 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret_key';
 router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
+    if (!name || !email || !password) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
     try {
         db.query('SELECT email FROM users WHERE email = ?', [email], async (err, results) => {
             if (err) {
-                throw err;
+                console.error('Database error checking email:', err);
+                return res.status(500).json({ error: 'Database error' });
             }
             
             if (results.length > 0) {
@@ -28,15 +33,21 @@ router.post('/register', async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, 10);
             
             db.query('SELECT COUNT(*) as count FROM users', (err, countResults) => {
+                if (err) {
+                    console.error('Database error counting users:', err);
+                    return res.status(500).json({ error: 'Database error' });
+                }
+
                 const is_admin = countResults[0].count === 0;
-                 const role = is_admin ? 'admin' : 'user'; // changed line
+                const role = is_admin ? 'admin' : 'user';
                 
                 db.query(
                     'INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, ?)',
                     [name, email, hashedPassword, is_admin],
                     (err, result) => {
                         if (err) {
-                            throw err;
+                            console.error('Database error inserting user:', err);
+                            return res.status(500).json({ error: 'Database error' });
                         }
                         
                         const token = jwt.sign(
@@ -61,6 +72,54 @@ router.post('/register', async (req, res) => {
         });
     } catch (error) {
         console.error('Registration error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Setup admin user (for hosts without shell access)
+router.post('/setup-admin', async (req, res) => {
+    const { setupToken, name, email, password } = req.body;
+    
+    // Protect this endpoint with a strong secret token stored in env
+    const expectedToken = process.env.SETUP_ADMIN_TOKEN;
+    if (!expectedToken || setupToken !== expectedToken) {
+        return res.status(403).json({ error: 'Forbidden: Invalid setup token' });
+    }
+
+    if (!email || !password || !name) {
+        return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+
+    try {
+        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            if (results.length > 0) {
+                // Update to admin
+                db.query(
+                    'UPDATE users SET password = ?, is_admin = 1 WHERE email = ?',
+                    [hashedPassword, email],
+                    (err) => {
+                        if (err) return res.status(500).json({ error: 'Update error' });
+                        res.json({ message: 'User updated to admin successfully' });
+                    }
+                );
+            } else {
+                // Insert new admin
+                db.query(
+                    'INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 1)',
+                    [name, email, hashedPassword],
+                    (err) => {
+                        if (err) return res.status(500).json({ error: 'Insert error' });
+                        res.status(201).json({ message: 'Admin user created successfully' });
+                    }
+                );
+            }
+        });
+    } catch (error) {
+        console.error('Setup admin error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
