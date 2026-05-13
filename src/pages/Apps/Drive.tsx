@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL as BASE_API_URL } from '../../config/api';
 
 type ServiceType = 'Google Docs' | 'MS Office Online' | 'Office 365' | 'Desktop applications';
 
@@ -79,7 +80,7 @@ const Drive = () => {
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const API_BASE_URL = `${API_BASE_URL}/api/drive`;
+  const API_BASE_URL = `${BASE_API_URL}/api/drive`;
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
