@@ -14,10 +14,11 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.9.0",
     "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "dotenv": "^16.6.1",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.0",
     "mysql": "^2.18.1",

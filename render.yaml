@@ -1,3 +1,21 @@
+# Render Blueprint: one-click deploy of the standalone Task Boards tool.
+# Sign in at https://render.com → New → Blueprint → point at this repo's branch.
+services:
+    - type: web
+      name: trakory-task-boards
+      runtime: node
+      plan: free
+      rootDir: backend
+      buildCommand: npm install
+      startCommand: node task-boards-server.js
+      envVars:
+          - key: NODE_ENV
+            value: production
+      healthCheckPath: /health
+      disk:
+          name: task-boards-data
+          mountPath: /opt/render/project/src/backend/data
+          sizeGB: 1
 # render.yaml - Render deployment configuration
 services:
   - type: web

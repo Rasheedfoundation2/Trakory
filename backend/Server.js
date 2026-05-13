@@ -7,32 +7,39 @@ const cors = require('cors');
 // Initialize Express app
 const app = express();
 
-// CORS configuration - allow frontend origins
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    process.env.FRONTEND_URL
-].filter(Boolean);
+// CORS — explicit, with preflight + credentials. Allows Vercel deploys
+// (any *.vercel.app), localhost dev, and anything in CORS_ORIGINS env.
+const extraOrigins = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, curl, etc.)
+const corsOptions = {
+    origin(origin, callback) {
+        // Non-browser requests (curl, server-to-server) have no Origin → allow.
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-            callback(null, true);
-        } else {
-            callback(null, true); // Allow all in initial deployment, tighten later
+        if (
+            origin.endsWith('.vercel.app') ||
+            origin.startsWith('http://localhost') ||
+            origin.startsWith('http://127.0.0.1') ||
+            extraOrigins.includes(origin)
+        ) {
+            return callback(null, true);
         }
+        return callback(null, false);
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
-// Handle OPTIONS requests (preflight)
-app.options('*', cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
+
+// Health check — useful to verify the backend is awake before debugging auth.
+app.get('/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 
 // Import database connection
 require('./config/db');
